@@ -32,5 +32,5 @@ public class WordsCounterTest {
     public void zeroIsReturnedForNullText() {
         assertEquals(0, wordsCounter.countWords(null));
     }
-    
+
 }

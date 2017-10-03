@@ -10,11 +10,11 @@ class WordsCounter {
             return 0;
         }
 
-       //String[] textWithOnlyWords = text.trim().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().split("\\s+");
+        //String[] textWithOnlyWords = text.trim().replaceAll("[^a-zA-Z0-9 ]+", "").toLowerCase().split("\\s+");
         String[] textWithOnlyWords = text.toLowerCase().split("[^a-zA-Z0-9]+");
 
         int count = textWithOnlyWords.length;
-        if (textWithOnlyWords.length>0 && textWithOnlyWords[0].equals("")) {
+        if (textWithOnlyWords.length > 0 && textWithOnlyWords[0].equals("")) {
             count = count - 1;
         }
         System.out.println(Arrays.toString(textWithOnlyWords));

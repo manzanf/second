@@ -2,6 +2,7 @@ package com.playtika.second;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -10,18 +11,19 @@ import static org.junit.Assert.*;
 
 public class TextTest {
     Text sentences = new Text("  one way,1 way -oNe*  ticket '");
-    Text nullText = new Text(null);
+   // Text nullText = new Text(null);
     Text emptyText = new Text(",  ^\\ @\n %\t ");
 
     @Test
     public void sortedSetOfUniqueWordsIsReturned() {
-        TreeSet<String> expectedSet = new TreeSet<>();
-        expectedSet.add("1");
+        TreeSet<String> expectedSet = new TreeSet<>(Arrays.asList("1","one","ticket","way"));
+        //new HashSet<String>(Arrays.asList("a", "b", "c"))
+      /*  expectedSet.add("1");
         expectedSet.add("one");
         expectedSet.add("ticket");
-        expectedSet.add("way");
+        expectedSet.add("way"); */
 
-        assertEquals(expectedSet.size(),sentences.getTopWords(4).size());
+        assertEquals(expectedSet.size(), sentences.getTopWords(4).size());
         Iterator<String> iteratorExpected = expectedSet.iterator();
         for (String nextActual : sentences.getTopWords(4)) {
             String nextExpected = iteratorExpected.next();
@@ -32,9 +34,9 @@ public class TextTest {
     @Test
     public void wordsWithDifferentCaseAreTheSame() {
         Text words = new Text("One wAy onE Way");
-        TreeSet<String> expectedSet = new TreeSet<>();
-        expectedSet.add("one");
-        expectedSet.add("way");
+        TreeSet<String> expectedSet = new TreeSet<>(Arrays.asList("one","way"));
+        /*expectedSet.add("one");
+        expectedSet.add("way"); */
         assertEquals(expectedSet.size(), words.getTopWords(4).size());
         Iterator<String> iteratorExpected = expectedSet.iterator();
         for (String nextActual : words.getTopWords(3)) {
@@ -45,22 +47,23 @@ public class TextTest {
 
     @Test
     public void cutSetIsReturnedIfNLessThanSetSize() {
-        assertEquals(2,sentences.getTopWords(2).size());
+        assertEquals(2, sentences.getTopWords(2).size());
     }
 
     @Test
     public void fullSetIsReturnedIfNMoreThanSetSize() {
-        assertEquals(4,sentences.getTopWords(5).size());
+        assertEquals(4, sentences.getTopWords(5).size());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void topCannotBeZero() throws Exception {
-        try {
+        sentences.getTopWords(0);
+        /*try {
             sentences.getTopWords(0);
             fail("IAE expected");
         } catch (IllegalArgumentException e) {
             assertEquals("N should be positive", e.getMessage());
-        }
+        }*/
     }
 
     @Test
@@ -68,17 +71,17 @@ public class TextTest {
         assertEquals(0, emptyText.getTopWords(3).size());
     }
 
-    @Test
+   /* @Test
     public void topWordsIsNullForNullText() {
         assertEquals(null, nullText.getTopWords(3));
-    }
+    } */
 
     @Test
     public void wordFrequenciesAreReturnedForTextWithBothCases() {
         HashMap<String, Integer> expectedFrequencies = new HashMap<>();
         expectedFrequencies.put("one", 2);
         expectedFrequencies.put("way", 2);
-        expectedFrequencies.put("ticket",1);
+        expectedFrequencies.put("ticket", 1);
         expectedFrequencies.put("1", 1);
         assertEquals(expectedFrequencies, sentences.getFrequencies());
     }
@@ -89,10 +92,10 @@ public class TextTest {
         assertEquals(expectedFrequencies, emptyText.getFrequencies());
     }
 
-    @Test
+  /*  @Test
     public void wordFrequenciesReturnsNullForNullText() {
         assertEquals(null, nullText.getFrequencies());
-    }
+    } */
 
     @Test
     public void lengthInCharsIsReturnedForText() {
@@ -104,8 +107,12 @@ public class TextTest {
         assertEquals(new Integer(0), emptyText.getLengthInChars());
     }
 
-    @Test
+   /* @Test
     public void lengthIsNullForNullText() {
         assertEquals(null, nullText.getLengthInChars());
-    }
+    } */
+   @Test(expected = IllegalArgumentException.class)  // ADD message!!
+   public void nullTextShouldNotBeProcessed() {
+       new Text(null);
+   }
 }
