@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.summingLong;
 
 class FilesProcessor {
 
-    public static void main(String[] args) throws NullPointerException, IOException {
+    public static void main(String[] args) throws IOException {
         File dir = new File("processedDir");
         if (!dir.isDirectory() || dir.listFiles() == null) {
             System.out.println("Target path is not a directory");
