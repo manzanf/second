@@ -1,13 +1,16 @@
-package com.playtika.second;
+package com.playtika.fourth;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
-import java.util.HashMap;
 import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingLong;
 
 class FilesProcessor {
 
@@ -32,33 +35,27 @@ class FilesProcessor {
             copyFile(sourceFile, destinationFile);
         } catch (IOException e) {
             System.out.println("Copying of the file is failed");
+            e.printStackTrace();
         }
     }
 
-    private static Map<String, Integer> getWordsFrequenciesInDir(File dir) {
-        Map<String, Integer> dirWordsFrequencies = new HashMap<>();
-        for (File file : dir.listFiles()) {
-            if (!file.isFile()) {
-                continue;
-            }
-            try {
-                String fileContent = new String(Files.readAllBytes(file.toPath()));
-                Text text = new Text(fileContent);
-                Map<String, Integer> fileWordsFrequencies = text.getFrequencies();
-                dirWordsFrequencies = mergeMaps(dirWordsFrequencies, fileWordsFrequencies);
-            } catch (IOException e) {
-                System.out.println("Can't read the file content");
-            }
+    private static String getFileContent(Path path) {
+        try {
+            return new String(Files.readAllBytes(path));
+        } catch (IOException e) {
+            System.out.println("The file cannot be processed: " + path);
+            e.printStackTrace();
+            return "";
         }
-        return dirWordsFrequencies;
     }
 
-    private static Map<String, Integer> mergeMaps(Map<String, Integer> oldMap, Map<String, Integer> newMap) {
-        for (String word : newMap.keySet()) {
-            Integer oldFrequency = oldMap.get(word) == null ? 0 : oldMap.get(word);
-            oldMap.put(word, oldFrequency + newMap.get(word));
-        }
-        return oldMap;
+    private static Map<String, Long> getWordsFrequenciesInDir(File dir) throws IOException {
+        return Files.list(dir.toPath())
+                .map(FilesProcessor::getFileContent)
+                .map(Text::new)
+                .map(Text::getFrequencies)
+                .flatMap(map -> map.entrySet().stream())
+                .collect(groupingBy(Map.Entry::getKey, summingLong(Map.Entry::getValue)));
     }
 
     private static void printFileInfo(File file) {

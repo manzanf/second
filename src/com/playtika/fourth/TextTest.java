@@ -1,16 +1,14 @@
-package com.playtika.second;
+package com.playtika.fourth;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 public class TextTest {
     Text sentences = new Text("  one way,1 way -oNe*  ticket '");
@@ -48,11 +46,11 @@ public class TextTest {
 
     @Test
     public void wordFrequenciesAreReturnedForTextWithBothCases() {
-        HashMap<String, Integer> expectedFrequencies = new HashMap<>();
-        expectedFrequencies.put("one", 2);
-        expectedFrequencies.put("way", 2);
-        expectedFrequencies.put("ticket", 1);
-        expectedFrequencies.put("1", 1);
+        HashMap<String, Long> expectedFrequencies = new HashMap<>();
+        expectedFrequencies.put("one", 2L);
+        expectedFrequencies.put("way", 2L);
+        expectedFrequencies.put("ticket", 1L);
+        expectedFrequencies.put("1", 1L);
         assertThat(sentences.getFrequencies(), is(equalTo(expectedFrequencies)));
     }
 

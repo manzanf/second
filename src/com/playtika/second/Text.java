@@ -1,6 +1,8 @@
 package com.playtika.second;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Text {
     private final String text;
@@ -8,16 +10,15 @@ class Text {
     Text(String text) {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
-        } else {
-            this.text = text;
         }
+        this.text = text;
     }
 
     public List<String> getTopWords(int n) {
         if (n < 1) {
-            throw new IllegalArgumentException("N should be positive");
+            throw new IllegalArgumentException("n should be positive");
         }
-        if (text.isEmpty()) {
+        if (words().isEmpty()) {
             return new ArrayList<>();
         }
         Set<String> uniqueWords = new TreeSet<>(words());
@@ -35,18 +36,24 @@ class Text {
 
     public Integer getLengthInChars() {
         Integer sumOfChars = 0;
-        for (String s : words()) {
-            sumOfChars += s.length();
+        for (String word : words()) {
+            sumOfChars += word.length();
         }
         return sumOfChars;
     }
 
     private List<String> words() {
         //String[] textWithOnlyWords = text.trim().replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase().split("\\s+");
+        /*Pattern pattern = Pattern.compile("[a-zA-Z0-9]+");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            String word = matcher.group();
+        }*/
+
         String[] textWithOnlyWords = text.toLowerCase().split("[^a-zA-Z0-9]+");
-        List<String> textList = new ArrayList<>(Arrays.asList(textWithOnlyWords));
+        List<String> textList = Arrays.asList(textWithOnlyWords);
         if (textList.size() > 0 && textList.get(0).equals("")) {
-            textList.remove(0);
+            textList = textList.subList(1, textList.size());
         }
         return textList;
     }
