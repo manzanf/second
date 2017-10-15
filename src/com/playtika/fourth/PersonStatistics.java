@@ -20,7 +20,7 @@ public class PersonStatistics {
                 new Person("Petr", 40, "Odessa"));
         System.out.println("Average age is " +
                 persons.stream()
-                        .mapToDouble(Person::getAge)
+                        .mapToInt(Person::getAge)
                         .average()
                         .orElseThrow(() -> new IllegalArgumentException("Empty list of persons")));
         Person oldestPerson = persons.stream()

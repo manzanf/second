@@ -9,8 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.Map;
 
+import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.summingLong;
 
 class FilesProcessor {
 
@@ -55,7 +55,7 @@ class FilesProcessor {
                 .map(Text::new)
                 .map(Text::getFrequencies)
                 .flatMap(map -> map.entrySet().stream())
-                .collect(groupingBy(Map.Entry::getKey, summingLong(Map.Entry::getValue)));
+                .collect(groupingBy(Map.Entry::getKey, counting()));
     }
 
     private static void printFileInfo(File file) {

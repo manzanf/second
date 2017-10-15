@@ -24,9 +24,6 @@ class Text {
         if (n < 1) {
             throw new IllegalArgumentException("n should be positive");
         }
-        if (words().isEmpty()) {
-            return new ArrayList<>();
-        }
         return words().stream()
                 .distinct()
                 .sorted()
@@ -36,7 +33,7 @@ class Text {
 
     public Map<String, Long> getFrequencies() {
         return words().stream()
-                 .collect(groupingBy(identity(), counting()));
+                .collect(groupingBy(identity(), counting()));
     }
 
     public Integer getLengthInChars() {
